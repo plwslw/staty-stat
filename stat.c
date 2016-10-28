@@ -9,17 +9,19 @@
 
 
 int main() {
-  struct stat *staty = (struct stat *)malloc(sizeof(struct stat *));
-  int err = stat("stat.c",staty);
+  struct stat staty;
+
+  int err = stat("stat.c",&staty);
 
   if (err < 0) {
     printf("Error: %s", strerror(err));
     return 0;
   }
 
-  printf("File size: %s\n",staty->st_blksize);
-  printf("Permissions: %s\n",staty->st_mode);
-  printf("Time of last access: %s\n",staty->st_atime);
+  printf("File size: %lld bytes\n",(long long)staty.st_size);
+  //printf("Permissions: %s\n",staty.st_mode);
+  printf("Time of last access: %s\n",ctime(&staty.st_atime));
+
   
   return 0;
 }
