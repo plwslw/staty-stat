@@ -7,8 +7,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-/*
-Custom definitions for permissions that are undefined in Windows
+
+//Custom definitions for permissions that are undefined in Windows
+#ifndef S_IRGRP
 
 //r
 #define S_IRGRP	        00040
@@ -22,7 +23,8 @@ Custom definitions for permissions that are undefined in Windows
 //all
 #define S_IRWXG		00070
 #define S_IRWXO		00007
-*/
+
+#endif
 
 
 //default is rw,r,r
@@ -30,8 +32,8 @@ Custom definitions for permissions that are undefined in Windows
 int main() {
   struct stat staty;
 
-  //int err = stat("stat.c",&staty);
-  int err = stat("a.exe",&staty);
+  int err = stat("stat.c",&staty);
+  //int err = stat("a.exe",&staty);
   
   if (err < 0) {
     printf("Error: %s", strerror(err));
