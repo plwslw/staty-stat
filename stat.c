@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
+#include <math.h>
 
 //Custom definitions for permissions that are undefined in Windows
 /*
@@ -30,6 +31,13 @@
 
 //default is rw,r,r
 
+float roundtoTwo(float f) {
+  f = f*100;
+  f = round(f);  
+  f = f/100;
+  return f;
+}
+
 int main() {
   struct stat staty;
 
@@ -40,12 +48,21 @@ int main() {
     printf("Error: %s", strerror(err));
     return 0;
   }
+  
+  int size = (int)staty.st_size;
+  if (size >= 1073741824) {
+    printf("File size: %f GB\n",(roundtoTwo(staty.st_size/1073741824.0)));
+  }
+  else if (size >= 1048576) {
+    printf("File size: %f MB\n",(roundtoTwo(staty.st_size/1048576.0)));
+  }
+  else if (size >= 1024) {
+    printf("File size: %f KB\n",(roundtoTwo(staty.st_size/1024.0)));
+  }
+  else {
+    printf("File size: %lld B\n",(long long)staty.st_size);
+  }
 
-  
-  
-  
-  printf("File size: %lld B\n",(long long)staty.st_size);
-  
   printf("Permissions: -");
   
   //User permissions

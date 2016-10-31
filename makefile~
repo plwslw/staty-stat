@@ -1,0 +1,11 @@
+GCC = gcc -g
+
+all: stat.c
+	$(GCC) -o stat.c stat
+
+clean:
+	rm *.o
+	rm *~
+
+run: all
+	./stat
