@@ -6,9 +6,10 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <time.h>
 
 //Custom definitions for permissions that are undefined in Windows
+/*
 #ifndef S_IRGRP
 
 //r
@@ -25,7 +26,7 @@
 #define S_IRWXO		00007
 
 #endif
-
+*/
 
 //default is rw,r,r
 
@@ -43,69 +44,26 @@ int main() {
   
   
   
-  printf("File size: %lld bytes\n",(long long)staty.st_size);
+  printf("File size: %lld B\n",(long long)staty.st_size);
   
   printf("Permissions: -");
+  
+  //User permissions
+  printf((staty.st_mode & S_IRUSR) ? "r":"-");
+  printf((staty.st_mode & S_IWUSR) ? "w":"-");
+  printf((staty.st_mode & S_IXUSR) ? "x":"-");
 
-  if (staty.st_mode & S_IRUSR) {
-    printf("r"); //read
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IWUSR) {
-    printf("w"); //write
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IXUSR) {
-    printf("x"); //execute
-  }
-  else {
-    printf("-");
-  }
+  //Group permissions
+  printf((staty.st_mode & S_IRGRP) ? "r":"-");
+  printf((staty.st_mode & S_IWGRP) ? "w":"-");
+  printf((staty.st_mode & S_IXGRP) ? "x":"-");
 
-  if (staty.st_mode & S_IRGRP) {
-    printf("r"); //read
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IWGRP) {
-    printf("w"); //write
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IXGRP) {
-    printf("x"); //execute
-  }
-  else {
-    printf("-");
-  }
-
-  if (staty.st_mode & S_IROTH) {
-    printf("r"); //read
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IWOTH) {
-    printf("w"); //write
-  }
-  else {
-    printf("-");
-  }
-  if (staty.st_mode & S_IXOTH) {
-    printf("x"); //execute
-  }
-  else {
-    printf("-");
-  }
+  //Other permissions
+  printf((staty.st_mode & S_IROTH) ? "r":"-");
+  printf((staty.st_mode & S_IWOTH) ? "w":"-");
+  printf((staty.st_mode & S_IXOTH) ? "x":"-");
   printf("\n");
-
-
+  
   printf("Time of last access: %s\n",ctime(&staty.st_atime));
 
   
@@ -113,34 +71,4 @@ int main() {
 }
 
 
- /*
-   //Not sure why it keeps printing 7
-
-  if (staty.st_mode & (S_IRUSR | S_IWUSR | S_IXUSR)) {
-    printf("7");
-  }
-  else if (staty.st_mode & (S_IRUSR | S_IWUSR)) {
-    printf("6"); //read & write
-  }
-  else if (staty.st_mode & (S_IRUSR | S_IXUSR)) {
-    printf("5"); //read & execute
-  }
-  else if (staty.st_mode & S_IRUSR) {
-    printf("4"); //read
-  }
-  else if (staty.st_mode & (S_IWUSR | S_IXUSR)) {
-    printf("3"); //write & execute
-  }
-  else if (staty.st_mode & S_IWUSR) {
-    printf("2"); //write
-  }
-  else if (staty.st_mode & S_IXUSR) {
-    printf("1"); //execute
-  }
-  else {
-    printf("0"); //none
-  }
-
-  printf("0");
-  printf("0\n");
-  */
+ 
